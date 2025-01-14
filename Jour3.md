@@ -1,7 +1,4 @@
-### **Multithreading en C++**
-
-Le multithreading permet d'exécuter plusieurs tâches simultanément, en exploitant la puissance des processeurs multi-cœurs modernes. En C++, le multithreading est géré principalement avec la classe `thread` et d'autres outils de synchronisation comme `mutex`, `condition_variable`, et `future`.
-
+# **Multithreading en C++**
 ---
 
 ## **1. Concepts de Base**
