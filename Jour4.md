@@ -53,7 +53,7 @@
 #include <SDL.h>
 #include <iostream>
 
-int main(int argc, char* argv[]) {
+int main() {
     // Initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "Erreur lors de l'initialisation de SDL : " << SDL_GetError() << std::endl;
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
 #include <SDL.h>
 #include <iostream>
 
-int main(int argc, char* argv[]) {
+int main() {
     // Initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "Erreur lors de l'initialisation de SDL : " << SDL_GetError() << std::endl;
@@ -183,7 +183,7 @@ int main(int argc, char* argv[]) {
 #include <SDL_image.h>
 #include <iostream>
 
-int main(int argc, char* argv[]) {
+int main() {
     // Initialisation de SDL et SDL_image
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "Erreur SDL : " << SDL_GetError() << std::endl;
@@ -231,6 +231,88 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 ```
+
+---
+Votre code utilise **SDL** et **SDL_image** pour afficher une image dans une fenêtre. Je vais vous guider sur son fonctionnement, vérifier sa justesse, et indiquer quelques améliorations possibles.
+
+---
+
+### **Explication du Code**
+
+1. **Initialisation de SDL et SDL_image**
+   ```cpp
+   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+       std::cerr << "Erreur SDL : " << SDL_GetError() << std::endl;
+       return 1;
+   }
+   IMG_Init(IMG_INIT_PNG);
+   ```
+   - `SDL_Init(SDL_INIT_VIDEO)` initialise SDL pour gérer la vidéo.  
+   - `IMG_Init(IMG_INIT_PNG)` prépare SDL_image à charger des images au format PNG.
+
+---
+
+2. **Création de la fenêtre et du renderer**
+   ```cpp
+   SDL_Window* window = SDL_CreateWindow("Textures et Images",
+                                         SDL_WINDOWPOS_CENTERED,
+                                         SDL_WINDOWPOS_CENTERED,
+                                         800, 600, SDL_WINDOW_SHOWN);
+   SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+   ```
+   - `SDL_CreateWindow` crée une fenêtre nommée "Textures et Images" de 800x600 pixels.
+   - `SDL_CreateRenderer` crée un **renderer**, une interface pour dessiner dans la fenêtre.
+
+---
+
+3. **Chargement et conversion de l'image**
+   ```cpp
+   SDL_Surface* surface = IMG_Load("chemin/vers/image.png");
+   if (!surface) {
+       std::cerr << "Erreur lors du chargement de l'image : " << IMG_GetError() << std::endl;
+   }
+   SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+   SDL_FreeSurface(surface);
+   ```
+   - `IMG_Load` charge une image (remplacez `"chemin/vers/image.png"` par le chemin réel de votre image).  
+   - `SDL_CreateTextureFromSurface` convertit l'image en texture utilisable par le **renderer**.  
+   - `SDL_FreeSurface(surface)` libère la mémoire utilisée par la surface.
+
+---
+
+4. **Boucle principale**
+   ```cpp
+   bool isRunning = true;
+   SDL_Event event;
+
+   while (isRunning) {
+       while (SDL_PollEvent(&event)) {
+           if (event.type == SDL_QUIT) isRunning = false;
+       }
+
+       SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+       SDL_RenderClear(renderer);
+
+       SDL_RenderCopy(renderer, texture, NULL, NULL);
+       SDL_RenderPresent(renderer);
+   }
+   ```
+   - `SDL_PollEvent` capture les événements (comme fermer la fenêtre avec la croix).  
+   - `SDL_SetRenderDrawColor` et `SDL_RenderClear` effacent l'écran avec une couleur noire (R:0, G:0, B:0, A:255).  
+   - `SDL_RenderCopy` dessine la texture à l'écran.  
+   - `SDL_RenderPresent` met à jour l'affichage.
+
+---
+
+5. **Nettoyage**
+   ```cpp
+   SDL_DestroyTexture(texture);
+   SDL_DestroyRenderer(renderer);
+   SDL_DestroyWindow(window);
+   IMG_Quit();
+   SDL_Quit();
+   ```
+   Libère toutes les ressources utilisées par SDL et SDL_image.
 
 ---
 
