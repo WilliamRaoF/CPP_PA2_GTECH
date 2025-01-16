@@ -53,7 +53,7 @@
 #include <SDL.h>
 #include <iostream>
 
-int main() {
+int main(int argc, char* argv[]) {
     // Initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "Erreur lors de l'initialisation de SDL : " << SDL_GetError() << std::endl;
@@ -112,7 +112,7 @@ int main() {
 #include <SDL.h>
 #include <iostream>
 
-int main() {
+int main(int argc, char* argv[]) {
     // Initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "Erreur lors de l'initialisation de SDL : " << SDL_GetError() << std::endl;
@@ -183,7 +183,7 @@ int main() {
 #include <SDL_image.h>
 #include <iostream>
 
-int main() {
+int main(int argc, char* argv[]) {
     // Initialisation de SDL et SDL_image
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "Erreur SDL : " << SDL_GetError() << std::endl;
